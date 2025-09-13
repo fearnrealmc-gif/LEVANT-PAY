@@ -3,7 +3,6 @@
 //   TELEGRAM_BOT_TOKEN (required)
 //   TELEGRAM_CHAT_ID   (optional default)
 //   ALLOWED_ORIGINS    (optional CSV allowlist)
-
 exports.handler = async (event) => {
   const cors = (status, bodyObj) => {
     const allowed = process.env.ALLOWED_ORIGINS;
@@ -42,7 +41,6 @@ exports.handler = async (event) => {
   if (!chatId) return cors(400, { ok: false, error: "Missing 'chat_id' (and no TELEGRAM_CHAT_ID default)" });
 
   try {
-    // If there's a file, send as document/photo
     if (file && file.dataUrl) {
       const m = String(file.dataUrl).split(',');
       if (m.length < 2) throw new Error("Invalid dataUrl");
@@ -67,7 +65,7 @@ exports.handler = async (event) => {
       return cors(200, { ok: true, result: data.result });
     }
 
-    // Fallback: sendMessage
+    // sendMessage
     const url = `https://api.telegram.org/bot${TOKEN}/sendMessage`;
     const tgRes = await fetch(url, {
       method: "POST",

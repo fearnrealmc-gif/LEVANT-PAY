@@ -1,4 +1,3 @@
-
 // tg_unified.js — unified helpers for Telegram sending via Netlify Function
 (function(){
   const ENDPOINT = '/.netlify/functions/telegram-notify';
@@ -54,7 +53,7 @@
       '💳 PayPal: ' + pp,
       '💲 المبلغ: ' + amt,
       file ? '📎 إيصال: مرفق' : null
-    ].filter(Boolean).join('\n');
+    ].filter(Boolean).join('\\n');
 
     const payload = { chat_id: window.currentChatId(), text, parse_mode:'HTML' };
     if(!payload.chat_id) throw new Error('لا يوجد Chat ID — احفظه من settings.html');
@@ -82,7 +81,7 @@
       '📞 الهاتف: ' + phone,
       '💰 المبلغ: ' + amount,
       note ? ('📝 ملاحظة: ' + note) : null
-    ].filter(Boolean).join('\n');
+    ].filter(Boolean).join('\\n');
     return await window.sendTG(text);
   };
 
@@ -98,29 +97,7 @@
       '📞 الهاتف: ' + phone,
       '💰 المبلغ: ' + amount,
       note ? ('📝 ملاحظة: ' + note) : null
-    ].filter(Boolean).join('\n');
+    ].filter(Boolean).join('\\n');
     return await window.sendTG(text);
   };
-
-  // Auto-bind if forms exist
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const bind = (id, handler)=>{
-      const btn = document.getElementById(id);
-      if(btn){
-        btn.addEventListener('click', async (e)=>{
-          e.preventDefault();
-          try{
-            await handler();
-            alert('تم الإرسال ✅');
-          }catch(err){
-            console.error(err);
-            alert('خطأ: ' + (err.message||err));
-          }
-        });
-      }
-    };
-    bind('btnSendDeposit', ()=>window.sendDeposit());
-    bind('btnSendShamCash', ()=>window.sendShamCash());
-    bind('btnSendSyriatel', ()=>window.sendSyriatel());
-  });
 })();
